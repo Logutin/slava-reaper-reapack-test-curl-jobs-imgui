@@ -15,6 +15,8 @@
 --   modules/Files.lua > modules/Files.lua
 --   modules/Util.lua > modules/Util.lua
 --   modules/json.lua > modules/json.lua
+--   bin/win/7z.exe > bin/win/7z.exe
+--   bin/win/7z.dll > bin/win/7z.dll
 -- Reaper-hosted interactive tester for DOCX extractor/parser modules.
 -- Mirrors the existing tester scripts: runtime guards, package.path handling,
 -- ReaImGui loop, persisted UI state, rolling logs, and on-exit state restore.
