@@ -43,3 +43,21 @@ Automated and static checks do not replace REAPER installation testing.
 
 The repository must not be described as fully live-smoke-tested until the
 pending platform results are recorded here.
+
+## Open Binary-Maintenance Findings
+
+- curl upstream currently lists 36 published security problems affecting curl
+  8.13.0: <https://curl.se/docs/vuln-8.13.0.html>. Several entries require
+  features disabled in Microsoft's Windows build, but HTTP authentication,
+  cookie, redirect, proxy, and connection-reuse findings require a use-case
+  review. Updating the pinned executable needs live regression testing because
+  the test suite intentionally verifies this build's behavior.
+- 7-Zip 26.02 is newer than the bundled 26.00, and upstream states that 26.02
+  fixes bugs and vulnerabilities: <https://www.7-zip.org/sdk.html>. Before a
+  production-ready declaration, assess and preferably update the bundled pair,
+  then repeat DOCX extraction and clean install/uninstall tests.
+
+Version `1.0.1` resolves the identified ReaPack licensing, provenance,
+platform-scoping, About, and release-history defects. Production readiness is
+still withheld pending the live smoke tests and the binary-maintenance decision
+above.
