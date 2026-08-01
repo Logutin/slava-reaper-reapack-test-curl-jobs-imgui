@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<index version="1" name="Slava REAPER Test Suite" commit="e8b3da3a8f1a05521fec8653f726fb7619080167">
+  <category name="Slava-Testing">
+    <reapack name="index.lua" type="script" desc="Slava REAPER Test Suite">
+      <version name="1.0.0" author="Slava Logutin" time="2026-08-01T15:19:49Z">
+        <changelog><![CDATA[Initial release]]></changelog>
+        <source main="main" platform="win64" file="test_Curl_Jobs.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/test_Curl_Jobs.lua</source>
+        <source main="main" platform="win64" file="test_Files.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/test_Files.lua</source>
+        <source main="main" platform="win64" file="test_docx.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/test_docx.lua</source>
+        <source main="main" platform="win64" file="test_neurocast_auth.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/test_neurocast_auth.lua</source>
+        <source main="main" platform="darwin" file="test_Curl_Jobs.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/test_Curl_Jobs.lua</source>
+        <source main="main" platform="darwin" file="test_Files.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/test_Files.lua</source>
+        <source main="main" platform="darwin" file="test_docx.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/test_docx.lua</source>
+        <source main="main" platform="darwin" file="test_neurocast_auth.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/test_neurocast_auth.lua</source>
+        <source platform="win64" file="modules/Cleanup.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Cleanup.lua</source>
+        <source platform="win64" file="modules/Curl.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Curl.lua</source>
+        <source platform="win64" file="modules/Files.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Files.lua</source>
+        <source platform="win64" file="modules/Jobs.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Jobs.lua</source>
+        <source platform="win64" file="modules/Parse.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Parse.lua</source>
+        <source platform="win64" file="modules/Utf8SimpleLowerData.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Utf8SimpleLowerData.lua</source>
+        <source platform="win64" file="modules/Utf8Tools.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Utf8Tools.lua</source>
+        <source platform="win64" file="modules/Util.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Util.lua</source>
+        <source platform="win64" file="modules/base64_encode_decode.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/base64_encode_decode.lua</source>
+        <source platform="win64" file="modules/docx_dialogue_parser.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/docx_dialogue_parser.lua</source>
+        <source platform="win64" file="modules/docx_xml_extractor.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/docx_xml_extractor.lua</source>
+        <source platform="win64" file="modules/docx_xml_parser.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/docx_xml_parser.lua</source>
+        <source platform="win64" file="modules/json.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/json.lua</source>
+        <source platform="win64" file="modules/neurocast_auth.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/neurocast_auth.lua</source>
+        <source platform="win64" file="modules/zip_archive.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/zip_archive.lua</source>
+        <source platform="darwin" file="modules/Cleanup.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Cleanup.lua</source>
+        <source platform="darwin" file="modules/Curl.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Curl.lua</source>
+        <source platform="darwin" file="modules/Files.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Files.lua</source>
+        <source platform="darwin" file="modules/Jobs.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Jobs.lua</source>
+        <source platform="darwin" file="modules/Parse.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Parse.lua</source>
+        <source platform="darwin" file="modules/Utf8SimpleLowerData.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Utf8SimpleLowerData.lua</source>
+        <source platform="darwin" file="modules/Utf8Tools.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Utf8Tools.lua</source>
+        <source platform="darwin" file="modules/Util.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/Util.lua</source>
+        <source platform="darwin" file="modules/base64_encode_decode.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/base64_encode_decode.lua</source>
+        <source platform="darwin" file="modules/docx_dialogue_parser.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/docx_dialogue_parser.lua</source>
+        <source platform="darwin" file="modules/docx_xml_extractor.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/docx_xml_extractor.lua</source>
+        <source platform="darwin" file="modules/docx_xml_parser.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/docx_xml_parser.lua</source>
+        <source platform="darwin" file="modules/json.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/json.lua</source>
+        <source platform="darwin" file="modules/neurocast_auth.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/neurocast_auth.lua</source>
+        <source platform="darwin" file="modules/zip_archive.lua">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/modules/zip_archive.lua</source>
+        <source platform="win64" file="bin/win/curl.exe">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/bin/win/curl.exe</source>
+        <source platform="win64" file="bin/win/7z.exe">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/bin/win/7z.exe</source>
+        <source platform="win64" file="bin/win/7z.dll">https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/e8b3da3a8f1a05521fec8653f726fb7619080167/Slava-Testing/bin/win/7z.dll</source>
+      </version>
+    </reapack>
+  </category>
+</index>
