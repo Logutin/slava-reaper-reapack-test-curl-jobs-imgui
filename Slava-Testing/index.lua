@@ -1,9 +1,10 @@
 -- @description Slava REAPER Test Suite
--- @version 1.0.0
+-- @version 1.0.1
 -- @author Slava Logutin
 -- @metapackage
 -- @changelog
---   Initial release
+--   Add repository and third-party licensing, exact binary provenance, and installed notices.
+--   Document safe release/platform rules and identify Unicode 17.0.0 generated data.
 -- @provides
 --   [main win64] test_Curl_Jobs.lua
 --   [main win64] test_Files.lua
@@ -18,4 +19,12 @@
 --   [win64] bin/win/curl.exe
 --   [win64] bin/win/7z.exe
 --   [win64] bin/win/7z.dll
-
+--   [win64] ../LICENSE > licenses/PROJECT-LICENSE.txt
+--   [darwin] ../LICENSE > licenses/PROJECT-LICENSE.txt
+--   [win64] ../THIRD_PARTY_NOTICES.md > licenses/THIRD_PARTY_NOTICES.md
+--   [darwin] ../THIRD_PARTY_NOTICES.md > licenses/THIRD_PARTY_NOTICES.md
+--   [win64] licenses/curl-COPYING.license > licenses/curl-COPYING.txt
+--   [win64] licenses/zlib-LICENSE.license > licenses/zlib-LICENSE.txt
+--   [win64] licenses/7-Zip-License.license > licenses/7-Zip-License.txt
+--   [win64] licenses/Unicode-License.license > licenses/Unicode-License.txt
+--   [darwin] licenses/Unicode-License.license > licenses/Unicode-License.txt

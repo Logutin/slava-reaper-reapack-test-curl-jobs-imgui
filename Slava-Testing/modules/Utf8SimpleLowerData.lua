@@ -1,5 +1,7 @@
 -- @noindex
--- Generated from data_utf8/UnicodeData.txt by dev/generate_utf8_simple_lower_data.lua
+-- Generated from Unicode 17.0.0 UnicodeData.txt by dev/generate_utf8_simple_lower_data.lua.
+-- Source: https://www.unicode.org/Public/17.0.0/ucd/UnicodeData.txt
+-- License: Unicode License V3; see ../licenses/Unicode-License.txt in the installed package.
 -- Contains only UnicodeData simple one-to-one lowercase mappings (field 13).
 -- Do not edit manually.
 

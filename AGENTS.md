@@ -1,54 +1,87 @@
 # Repository Guidelines for AI Agents
 
-This repository (slava-reaper-reapack-test-curl-jobs-imgui) contains a set of ReaImGui interactive test scripts and support modules designed for testing REAPER integration features, formatted for distribution via ReaPack.
+This repository contains ReaImGui integration test scripts and support modules
+distributed through ReaPack as the single **Slava REAPER Test Suite**
+metapackage.
 
----
+## Critical Rules
 
-## Critical Rules & Guidelines
+### Branch and Git Workflow
 
-### 1. Branching & Git Workflow
-> [!IMPORTANT]
-> **Work only on the main branch.**
-> If it is absolutely necessary to create another branch, **stop and ask the user** before doing so.
+Work only on `main`. If another branch is absolutely necessary, stop and ask
+the owner before creating it.
 
-### 2. ReaPack Metadata & File Structure
-- **Category Folder (/Slava-Testing/)**: Package scripts, support modules, and binary executables reside under the `Slava-Testing/` category folder.
-- **Suite Metapackage (/Slava-Testing/index.lua)**: Package distribution is managed by a single `@metapackage` manifest (`Slava-Testing/index.lua`) that defines all main entry points, shared modules, and platform-restricted binaries (`[win64]`).
-- **Entrypoint Test Scripts (/Slava-Testing/test_*.lua)**: Individual test scripts inside `Slava-Testing/` use `-- @noindex` since ownership is governed by the suite manifest.
-- **Support Modules (/Slava-Testing/modules/*.lua)**: All shared Lua modules reside in `Slava-Testing/modules/` and include `-- @noindex` at the top of the file.
+### ReaPack Architecture and Platform Scoping
 
----
+- Keep exactly one indexed package: `Slava-Testing/index.lua`.
+- Do not split or replace the metapackage architecture.
+- Entrypoint scripts are `Slava-Testing/test_*.lua`; each uses `-- @noindex`
+  because the metapackage owns it.
+- Shared modules are `Slava-Testing/modules/*.lua`; each uses `-- @noindex`.
+- Declare every action and module separately for `[win64]` and `[darwin]`.
+- Declare `curl.exe`, `7z.exe`, and `7z.dll` only for `[win64]`.
+- Windows x64 uses the bundled executables under `Slava-Testing/bin/win/`.
+- macOS uses `/usr/bin/curl` and system `unzip`; do not provide Windows
+  executables to macOS.
+- Do not add unscoped or Linux sources. Linux must receive no installable
+  actions, modules, binaries, or support files.
 
-## Codebase Architecture
+### Normal ReaPack Release Sequence
 
-### Category Package Manifest
-- index.lua — ReaPack suite metapackage defining all installed actions, modules, and binaries.
+1. Change the provided files.
+2. Bump `@version` in `Slava-Testing/index.lua`.
+3. Add an accurate `@changelog`.
+4. Commit the source changes.
+5. Run `reapack-index --check --strict --warnings`.
+6. Run `reapack-index --scan --no-commit`.
+7. Verify that `index.xml` contains a new version and preserves every previous
+   version unchanged.
+8. Commit and push `index.xml`.
 
-### Entrypoint Test Scripts (/Slava-Testing/test_*.lua)
-- test_Curl_Jobs.lua — ReaImGui tester for asynchronous HTTP operations (modules.Curl) and background execution queues (modules.Jobs).
-- test_Files.lua — ReaImGui tester for filesystem utilities (modules.Files), path manipulation, and sandbox file operations.
-- test_docx.lua — ReaImGui tester for DOCX archive extraction (modules.docx_xml_extractor), XML parsing (modules.docx_xml_parser), and dialogue extraction (modules.docx_dialogue_parser).
-- test_neurocast_auth.lua — ReaImGui tester for authentication flow testing against Neurocast endpoints (modules.neurocast_auth).
+Use `reapack-index --about README.md --no-scan --no-commit` when refreshing the
+repository About metadata. Pandoc must be available on `PATH` for the Markdown
+to RTF conversion.
 
-### Module Dependencies (/modules)
-- Curl.lua — Network transport layer built on top of curl.
-- Jobs.lua — Asynchronous background task scheduler and progress monitor.
-- Files.lua — Safe cross-platform filesystem helper functions.
-- Util.lua — Logging, extstate storage, and path utilities.
-- json.lua — Standard JSON encoder and decoder.
-- docx_xml_extractor.lua — Unpacks and extracts XML payloads from .docx packages.
-- docx_xml_parser.lua — Parses extracted Word processing XML content into structured nodes.
-- docx_dialogue_parser.lua — Extracts character roles, dialogue, and scripts from parsed DOCX structures.
-- Parse.lua — General-purpose string and table parsing helpers.
-- zip_archive.lua — ZIP extraction interface.
-- ase64_encode_decode.lua — Base64 and URL-safe Base64 codec.
-- 
-eurocast_auth.lua — Token-based identity authentication and refresh client.
+`--amend` is forbidden for routine releases. It may be used only after an
+explicit owner decision to alter an already indexed version.
 
----
+### Binary Licensing and Provenance
 
-## Maintenance & Code Quality Standards
+- Preserve `LICENSE`, `THIRD_PARTY_NOTICES.md`, and the files under
+  `Slava-Testing/licenses/`.
+- Deliver applicable notices with binaries through the metapackage.
+- Whenever a binary changes, update its exact product/version, architecture,
+  upstream URL, archive filename, SHA-256, acquisition date, applicable
+  license, and reported bundled dependencies.
+- Re-verify that the committed binary bytes match the documented upstream
+  artifact. Never guess missing provenance.
+- Preserve 7-Zip's LGPL/BSD/unRAR notices and source-code link, curl's COPYING
+  terms, and every notice required by curl's reported bundled libraries.
 
-1. **ReaImGui Compatibility**: Ensure all UI elements use current ReaImGui API conventions (e.g., passing explicit font sizes to eaper.ImGui_PushFont).
-2. **Error Handling & Logging**: Use modules.Util logging functions for diagnostic messages instead of unformatted print statements.
-3. **Sandbox Testing**: File operations performed during test runs should be scoped to REAPER's resource path (e.g. Data/Files_Module_Test/tmp) to avoid corrupting user project environments.
+## Codebase
+
+### Entrypoint Scripts
+
+- `test_Curl_Jobs.lua` tests `modules.Curl` and `modules.Jobs`.
+- `test_Files.lua` tests filesystem and sandbox operations.
+- `test_docx.lua` tests DOCX extraction, XML parsing, and dialogue extraction.
+- `test_neurocast_auth.lua` tests `modules.neurocast_auth`.
+
+### Shared Modules
+
+Key modules include `Curl.lua`, `Jobs.lua`, `Files.lua`, `Util.lua`, `json.lua`,
+`Cleanup.lua`, `Parse.lua`, `Utf8Tools.lua`, `Utf8SimpleLowerData.lua`,
+`base64_encode_decode.lua`, `zip_archive.lua`, `docx_xml_extractor.lua`,
+`docx_xml_parser.lua`, `docx_dialogue_parser.lua`, and `neurocast_auth.lua`.
+
+## Maintenance Standards
+
+1. Use current ReaImGui API conventions, including an explicit size when
+   calling `reaper.ImGui_PushFont` or its shim equivalent.
+2. Use `modules.Util` logging helpers for diagnostics instead of unformatted
+   `print` calls.
+3. Scope test file operations to REAPER's resource path, such as
+   `Data/Files_Module_Test/tmp`, to avoid touching user project data.
+4. Run Lua syntax checks, strict ReaPack validation, platform-source assertions,
+   and the documented clean-install/uninstall smoke tests before declaring a
+   release production-ready.
