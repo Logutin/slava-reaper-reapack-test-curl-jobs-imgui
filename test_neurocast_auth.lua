@@ -8,8 +8,10 @@
 --   modules/Curl.lua > modules/Curl.lua
 --   modules/Files.lua > modules/Files.lua
 --   modules/Util.lua > modules/Util.lua
+--   modules/Cleanup.lua > modules/Cleanup.lua
 --   modules/json.lua > modules/json.lua
 --   modules/base64_encode_decode.lua > modules/base64_encode_decode.lua
+--   bin/win/curl.exe > bin/win/curl.exe
 
 --========================================================
 -- test_neurocast_auth.lua
@@ -86,8 +88,9 @@ local function shell_quote(arg)
   end
 end
 
+local bundled_curl = script_path .. "bin" .. separator .. "win" .. separator .. "curl.exe"
 local CFG = {
-  curl = mac and "/usr/bin/curl" or "curl",
+  curl = mac and "/usr/bin/curl" or (reaper.file_exists(bundled_curl) and bundled_curl or "curl"),
   timeout_sec = 60,
   use_fail_with_body = true
 }

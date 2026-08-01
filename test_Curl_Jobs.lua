@@ -8,7 +8,9 @@
 --   modules/Jobs.lua > modules/Jobs.lua
 --   modules/Files.lua > modules/Files.lua
 --   modules/Util.lua > modules/Util.lua
+--   modules/Cleanup.lua > modules/Cleanup.lua
 --   modules/json.lua > modules/json.lua
+--   bin/win/curl.exe > bin/win/curl.exe
 -- Reaper-hosted interactive tester for modules.Curl and modules.Jobs.
 -- Mirrors test_Files.lua structure: runtime guards, package.path handling,
 -- ReaImGui loop, rolling logs, and an optional exit cleanup hook.
@@ -500,9 +502,11 @@ end
 function Helpers.build_cfg()
   local cfg = {}
   cfg.tmp_dir = runtime.sandbox_root
-  cfg.curl =
-    Util.mac and "/usr/bin/curl"
-    or [===[C:\code\curl_test_01\curl.exe]===]
+  local bundled_curl = Util.path_join(script_path, "bin")
+  bundled_curl = Util.path_join(bundled_curl, "win")
+  bundled_curl = Util.path_join(bundled_curl, "curl.exe")
+
+  cfg.curl = Util.mac and "/usr/bin/curl" or bundled_curl
   cfg.timeout_sec = Util.parse_number(INPUTS.request_timeout_sec, 45, 1)
   cfg.max_concurrent_jobs = Util.parse_int(INPUTS.max_concurrent_jobs, 12, 1)
   cfg.max_concurrent_IVC_jobs = Util.parse_int(INPUTS.max_concurrent_ivc_jobs, 1, 1)
