@@ -1,21 +1,7 @@
--- @description Test Neurocast Auth (ReaImGui)
--- @version 1.0.0
--- @author Slava Logutin
--- @about Interactive ReaImGui test interface for Neurocast authentication endpoints (Login, Refresh token, Get User/Token).
--- @provides
---   [main] .
---   modules/neurocast_auth.lua > modules/neurocast_auth.lua
---   modules/Curl.lua > modules/Curl.lua
---   modules/Files.lua > modules/Files.lua
---   modules/Util.lua > modules/Util.lua
---   modules/Cleanup.lua > modules/Cleanup.lua
---   modules/json.lua > modules/json.lua
---   modules/base64_encode_decode.lua > modules/base64_encode_decode.lua
---   bin/win/curl.exe > bin/win/curl.exe
-
+-- @noindex
 --========================================================
 -- test_neurocast_auth.lua
--- Minimal auth tester built on top of run_curl_minimal_no_disk()
+-- Minimal auth tester with protected temporary payload files and secret redaction.
 --========================================================
 
 -- GLOBALS ------------------------------------------------
@@ -52,10 +38,51 @@ local SMALL_FONT = reaper.ImGui_CreateFont('monospace')
 reaper.ImGui_Attach(ctx, SMALL_FONT)
 
 -- UTILITIES ----------------------------------------------
+local S = {
+  email = "",
+  password = "",
+  status = "",
+  last_cmd = "",
+  last_output = "",
+  last_err = "",
+  access_token = "",
+  refresh_token = "",
+  auphonic_token = ""
+}
+
+local function pattern_escape(value)
+  return tostring(value or ""):gsub("([^%w])", "%%%1")
+end
+
+local function redact_secret_values(text)
+  if type(text) ~= "string" or text == "" then return text end
+  local str = text
+  local secrets = {
+    S.password,
+    S.access_token,
+    S.refresh_token,
+    S.auphonic_token
+  }
+  for _, secret in ipairs(secrets) do
+    local secret_txt = tostring(secret or "")
+    if #secret_txt > 0 then
+      str = str:gsub(pattern_escape(secret_txt), "[REDACTED_SECRET]")
+    end
+  end
+  str = str:gsub("(Authorization:%s*[Bb][Ee][Aa][Rr][Ee][Rr]%s+)[^\"'%s\r\n]+", "%1[REDACTED_SECRET]")
+  str = str:gsub("(authorization:%s*[Bb][Ee][Aa][Rr][Ee][Rr]%s+)[^\"'%s\r\n]+", "%1[REDACTED_SECRET]")
+  str = str:gsub('("password"%s*:%s*")[^"]+(")', '%1[REDACTED_SECRET]%2')
+  str = str:gsub('("access_token"%s*:%s*")[^"]+(")', '%1[REDACTED_SECRET]%2')
+  str = str:gsub('("refresh_token"%s*:%s*")[^"]+(")', '%1[REDACTED_SECRET]%2')
+  str = str:gsub('("auphonic_token"%s*:%s*")[^"]+(")', '%1[REDACTED_SECRET]%2')
+  return str
+end
+
 local function msg(message, message_importance, box, no_new_line)
   if message_importance then else message_importance = 0 end
   if message_importance < messaging_level then return end
   if type(message) ~= "string" then message = tostring(message) end
+  message = redact_secret_values(message)
   local new_line_or_nothing = no_new_line and '' or '\n'
   if box == 'box' then
     reaper.ShowMessageBox(message, 'Error', 0)
@@ -95,25 +122,41 @@ local CFG = {
   use_fail_with_body = true
 }
 
-local function run_curl_minimal_no_disk(req)
-  assert(req and req.url, "run_curl_minimal_no_disk: req.url required")
+local function run_curl_with_temp_payload(req)
+  assert(req and req.url, "run_curl_with_temp_payload: req.url required")
   
   if req.form_fields then
-    return nil, "run_curl_minimal_no_disk: form_fields not supported (no disk)", ""
+    return nil, "run_curl_with_temp_payload: form_fields not supported (no disk)", ""
   end
   if req.download_path then
-    return nil, "run_curl_minimal_no_disk: download_path not supported (no disk)", ""
+    return nil, "run_curl_with_temp_payload: download_path not supported (no disk)", ""
   end
   
+  local payload_file = nil
   local data_arg = nil
-  if req.method == "POST" and req.json_payload_tbl then
-    local ok, payload = pcall(json.encode, req.json_payload_tbl)
-    if not ok then
-      return nil, "JSON encode failed: " .. tostring(payload), ""
+  if (req.method == "POST" or req.method == "PUT") and (req.json_payload_tbl or req.body_string) then
+    local content = req.body_string
+    if req.json_payload_tbl then
+      local ok, payload = pcall(json.encode, req.json_payload_tbl)
+      if not ok then
+        return nil, "JSON encode failed: " .. tostring(payload), ""
+      end
+      content = payload
     end
-    data_arg = [[--data-binary ]] .. shell_quote(payload)
-  elseif req.body_string then
-    data_arg = [[--data-binary ]] .. shell_quote(req.body_string)
+    
+    local resource_dir = reaper.GetResourcePath()
+    local tmp_dir = resource_dir .. separator .. "Data" .. separator .. "Slava_Auth_Test_tmp"
+    reaper.RecursiveCreateDirectory(tmp_dir, 0)
+    payload_file = tmp_dir .. separator .. "auth_req_payload.json"
+    
+    local fh, fh_err = io.open(payload_file, "wb")
+    if not fh then
+      return nil, "Failed to write payload file: " .. tostring(fh_err), ""
+    end
+    fh:write(content)
+    fh:close()
+    
+    data_arg = "--data-binary @" .. shell_quote(payload_file)
   end
   
   local hdr_argv = {}
@@ -144,21 +187,12 @@ local function run_curl_minimal_no_disk(req)
   local cmd = join_cmd(argv)
   local timeout = req.timeout_sec or CFG.timeout_sec
   
-  local masked_cmd = cmd
-  if req.headers then
-    local tok = req.headers["Authorization"] or req.headers["authorization"]
-    if tok and tok ~= "" then
-      masked_cmd = masked_cmd:gsub(
-        "(Authorization:%s*[Bb][Ee][Aa][Rr][Ee][Rr]%s+)[^\"'%s]+",
-        "%1***"
-      )
-    end
+  local exec_output = reaper.ExecProcess(cmd, (timeout * 1000))
+  if payload_file then
+    os.remove(payload_file)
   end
   
-  local exec_output = reaper.ExecProcess(cmd, (timeout * 1000))
-  if exec_output then
-    msg('RAW curl output: '..tostring(exec_output), 0)
-  end
+  local masked_cmd = redact_secret_values(cmd)
   
   if not exec_output then
     return nil, "ExecProcess returned nil (command likely failed to start)", masked_cmd
@@ -185,24 +219,12 @@ local AUTH = {
   auphonic_token_url = "https://neurohub.click/api/auphonic/token"
 }
 
-local S = {
-  email = "",
-  password = "",
-  status = "",
-  last_cmd = "",
-  last_output = "",
-  last_err = "",
-  access_token = "",
-  refresh_token = "",
-  auphonic_token = ""
-}
-
 local function log_result(tag, output_txt, err_txt, masked_cmd)
   msg('==== '..tag..' ====')
-  msg('CMD: '..tostring(masked_cmd or 'masking failed, so command will not be shown!'))
-  if err_txt then msg('err: '..tostring(err_txt), 2) end
+  msg('CMD: '..tostring(redact_secret_values(masked_cmd or 'masking failed, so command will not be shown!')))
+  if err_txt then msg('err: '..tostring(redact_secret_values(err_txt)), 2) end
   if output_txt and output_txt ~= '' then
-    msg('response: '..tostring(output_txt))
+    msg('response: '..tostring(redact_secret_values(output_txt)))
   else
     msg('response: <empty>')
   end
@@ -260,9 +282,9 @@ local function call_login()
     timeout_sec = CFG.timeout_sec,
     kind = "post"
   }
-  local output_txt, err_txt, masked_cmd = run_curl_minimal_no_disk(req)
+  local output_txt, err_txt, masked_cmd = run_curl_with_temp_payload(req)
   S.last_cmd = masked_cmd or "masking failed, so command will not be shown!"
-  S.last_output = output_txt or "no output from run_curl_minimal_no_disk!"
+  S.last_output = output_txt or "no output from run_curl_with_temp_payload!"
   S.last_err = err_txt
   S.access_token, S.refresh_token = decode_tokens_from_output(output_txt)
   if S.access_token ~= "" then
@@ -294,7 +316,7 @@ local function call_refresh()
     timeout_sec = CFG.timeout_sec,
     kind = "post"
   }
-  local output_txt, err_txt, masked_cmd = run_curl_minimal_no_disk(req)
+  local output_txt, err_txt, masked_cmd = run_curl_with_temp_payload(req)
   S.last_cmd = masked_cmd or ""
   S.last_output = output_txt or ""
   S.last_err = err_txt
@@ -326,7 +348,7 @@ local function call_auphonic_token()
     timeout_sec = CFG.timeout_sec,
     kind = "get"
   }
-  local output_txt, err_txt, masked_cmd = run_curl_minimal_no_disk(req)
+  local output_txt, err_txt, masked_cmd = run_curl_with_temp_payload(req)
   S.last_cmd = masked_cmd or ""
   S.last_output = output_txt or ""
   S.last_err = err_txt
@@ -377,15 +399,15 @@ local function GuiLoop()
       call_auphonic_token()
     end
     
-    reaper.ImGui_Text(ctx, "Status: "..(S.status or ""))
+    reaper.ImGui_Text(ctx, "Status: "..(redact_secret_values(S.status) or ""))
     
     reaper.ImGui_PushFont(ctx, SMALL_FONT, SMALL_FONT_SIZE)
-    reaper.ImGui_TextWrapped(ctx, "Last cmd: "..(S.last_cmd or ""))
-    reaper.ImGui_TextWrapped(ctx, "Last output: "..(S.last_output or ""))
-    reaper.ImGui_TextWrapped(ctx, "Last err: "..(S.last_err or ""))
-    reaper.ImGui_TextWrapped(ctx, "Access token: "..((S.access_token ~= "" and S.access_token) or "(empty)"))
-    reaper.ImGui_TextWrapped(ctx, "Refresh token: "..((S.refresh_token ~= "" and S.refresh_token) or "(empty)"))
-    reaper.ImGui_TextWrapped(ctx, "Auphonic token: "..((S.auphonic_token ~= "" and S.auphonic_token) or "(empty)"))
+    reaper.ImGui_TextWrapped(ctx, "Last cmd: "..(redact_secret_values(S.last_cmd) or ""))
+    reaper.ImGui_TextWrapped(ctx, "Last output: "..(redact_secret_values(S.last_output) or ""))
+    reaper.ImGui_TextWrapped(ctx, "Last err: "..(redact_secret_values(S.last_err) or ""))
+    reaper.ImGui_TextWrapped(ctx, "Access token: "..((S.access_token ~= "" and ("[REDACTED] (len " .. #S.access_token .. ")")) or "(empty)"))
+    reaper.ImGui_TextWrapped(ctx, "Refresh token: "..((S.refresh_token ~= "" and ("[REDACTED] (len " .. #S.refresh_token .. ")")) or "(empty)"))
+    reaper.ImGui_TextWrapped(ctx, "Auphonic token: "..((S.auphonic_token ~= "" and ("[REDACTED] (len " .. #S.auphonic_token .. ")")) or "(empty)"))
     reaper.ImGui_PopFont(ctx)
     
     reaper.ImGui_End(ctx)

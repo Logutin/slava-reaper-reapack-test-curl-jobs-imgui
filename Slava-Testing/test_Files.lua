@@ -1,11 +1,4 @@
--- @description Test Files Module (ReaImGui)
--- @version 1.0.0
--- @author Slava Logutin
--- @about Interactive test suite for the Files module in REAPER using ReaImGui.
--- @provides
---   [main] .
---   modules/Files.lua > modules/Files.lua
---   modules/Util.lua > modules/Util.lua
+-- @noindex
 -- Reaper-hosted interactive tester for modules.Files.
 -- Mirrors test_Util.lua structure: runtime guards, package.path handling,
 -- ReaImGui loop, and restored Util settings on exit.

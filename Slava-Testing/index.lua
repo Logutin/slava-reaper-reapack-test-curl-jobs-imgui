@@ -1,0 +1,13 @@
+-- @description Slava REAPER Test Suite
+-- @version 1.0.0
+-- @author Slava Logutin
+-- @metapackage
+-- @provides
+--   [main] test_Curl_Jobs.lua
+--   [main] test_Files.lua
+--   [main] test_docx.lua
+--   [main] test_neurocast_auth.lua
+--   modules/*.lua
+--   [win64] bin/win/curl.exe
+--   [win64] bin/win/7z.exe
+--   [win64] bin/win/7z.dll

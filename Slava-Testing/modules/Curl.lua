@@ -572,7 +572,7 @@ end
 function Curl.launch_curl_job(job)
   ensure_initialized()
   assert(job and job.cfg_path, "launch_curl_job: job.cfg_path required")
-  local argv = { tostring(cfg_value("curl")), "-q", "--config", Curl.shell_quote(job.cfg_path) }
+  local argv = { Curl.shell_quote(cfg_value("curl")), "-q", "--config", Curl.shell_quote(job.cfg_path) }
   local cmd = Curl.join_cmd(argv)
   local exec_output = r.ExecProcess(cmd, -2)
   if not exec_output then

@@ -1,16 +1,4 @@
--- @description Test Curl and Jobs (ReaImGui)
--- @version 1.0.0
--- @author Slava Logutin
--- @about Interactive test suite for Curl HTTP requests and background Jobs in REAPER using ReaImGui.
--- @provides
---   [main] .
---   modules/Curl.lua > modules/Curl.lua
---   modules/Jobs.lua > modules/Jobs.lua
---   modules/Files.lua > modules/Files.lua
---   modules/Util.lua > modules/Util.lua
---   modules/Cleanup.lua > modules/Cleanup.lua
---   modules/json.lua > modules/json.lua
---   bin/win/curl.exe > bin/win/curl.exe
+-- @noindex
 -- Reaper-hosted interactive tester for modules.Curl and modules.Jobs.
 -- Mirrors test_Files.lua structure: runtime guards, package.path handling,
 -- ReaImGui loop, rolling logs, and an optional exit cleanup hook.
