@@ -2,12 +2,20 @@
 -- @version 1.0.0
 -- @author Slava Logutin
 -- @metapackage
+-- @changelog
+--   Initial release
 -- @provides
---   [main] test_Curl_Jobs.lua
---   [main] test_Files.lua
---   [main] test_docx.lua
---   [main] test_neurocast_auth.lua
---   modules/*.lua
+--   [main win64] test_Curl_Jobs.lua
+--   [main win64] test_Files.lua
+--   [main win64] test_docx.lua
+--   [main win64] test_neurocast_auth.lua
+--   [main darwin] test_Curl_Jobs.lua
+--   [main darwin] test_Files.lua
+--   [main darwin] test_docx.lua
+--   [main darwin] test_neurocast_auth.lua
+--   [win64] modules/*.lua
+--   [darwin] modules/*.lua
 --   [win64] bin/win/curl.exe
 --   [win64] bin/win/7z.exe
 --   [win64] bin/win/7z.dll
+
