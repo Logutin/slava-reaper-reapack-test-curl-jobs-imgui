@@ -1,61 +1,73 @@
-# ReaPack Production-Readiness Audit
+# ReaPack v1.0.2 Workflow Audit
 
-## Local Tooling Authorization
+## Tooling and Authorization
 
+- Ruby: `4.0.6`; `reapack-index`: `1.2.6`; Pandoc: `3.10`.
 - Do not install, update, or remove Ruby or `reapack-index` without the
-  owner's explicit approval.
-- Check command availability and version first. Treat a missing tool as a
-  blocker to the corresponding indexing step; do not install a replacement by
-  default.
-- The 2026-08-02 workstation check found neither Ruby nor the
-  `reapack-index` command-line tool installed or available on `PATH`.
-- REAPER's installed ReaPack extension is separate from `reapack-index` and
-  does not authorize installing the command-line indexer.
+  owner's explicit approval. Check availability and version first; a missing
+  tool blocks the corresponding indexing step.
 
-## Package Structure
+## Source Release
 
-- Exactly one indexed package: `Slava-Testing/index.lua`.
-- The package remains a single metapackage; the architecture was not split or
-  replaced.
-- Published version `1.0.0` contains exactly 41 sources: 8 action sources,
-  30 module sources, and 3 Windows binary sources.
-- Version `1.0.1` contains 50 sources: the same 8 action, 30 module, and 3
-  Windows binary sources, plus 9 platform-scoped license/notice sources.
-  This is reported separately from the historical `1.0.0` count.
-- Windows x64 receives actions, modules, binaries, and notices. macOS receives
-  actions, modules, and applicable notices. Linux receives no sources.
+- `3d1168743456d2be2a12ca27f5e5bf8907bb5f15` prepares v1.0.2 with a harmless
+  `test_Files.lua` status-message update and README improvements.
+- `13c3daf5cc8a072ce7b7a519f259d380d2e3b285` corrects package About metadata.
+- `29b631b9bea72b8db4fb11af628ef4638ebe67cd` adds the complete multiline
+  package About using the indexer's required header syntax.
+- No commit was amended.
 
-## Automated Checks
+## Exact Commands and Results
 
-The release is accepted only when all of these checks pass:
+```powershell
+reapack-index --check --strict --warnings
+```
 
-- Every Lua source parses with Lua 5.4.
-- `reapack-index --check --strict --warnings` reports zero failures.
-- `reapack-index --scan --no-commit` creates `1.0.1` while the serialized
-  `1.0.0` version remains byte-for-byte unchanged.
-- `index.xml` contains repository About text generated from `README.md` using
-  Pandoc through `reapack-index --about README.md --no-scan --no-commit`.
-- All indexed URLs resolve, binary hashes match `THIRD_PARTY_NOTICES.md`, and
-  every installed target remains inside the package-owned `Slava-Testing`
-  directory.
+Result after the final source commit: `Finished checks for 20 packages with 0
+failures`.
 
-## Live Smoke-Test Status
+```powershell
+reapack-index --scan --no-commit
+```
 
-Automated and static checks do not replace REAPER installation testing.
+Result: `1 modified package, 1 new version`.
 
-- **Windows x64:** pending owner test against the public `1.0.1` index. Install
-  the package in a clean or portable REAPER, run all four actions, confirm the
-  installed `bin/win/curl.exe`, `bin/win/7z.exe`, and `bin/win/7z.dll` paths,
-  then uninstall and verify unrelated files remain.
-- **macOS:** not executed for this release cycle. The static index/platform and
-  path-selection checks are required, but production readiness remains explicit
-  about the missing live macOS run.
-- **Linux:** verify from `index.xml` that the package has no Linux/all-platform
-  sources and is therefore not installable.
+```powershell
+reapack-index --about README.md --no-scan --no-commit
+```
 
-The repository must not be described as fully live-smoke-tested until the
-pending platform results are recorded here.
+Result: `1 modified metadata`.
 
-Version `1.0.1` remains the last indexed release. A v1.0.2 source preparation
-commit exists, but its indexing workflow is pending explicit approval to install
-the required command-line tooling or provide its installed location.
+The indexer normalizes a newline inside the historical v1.0.1 changelog while
+serializing. After generation, the exact committed v1.0.0 and v1.0.1 XML
+version blocks were restored mechanically before committing the new index.
+Byte comparisons reported `True` for both historical blocks.
+
+## Generated Index Inspection
+
+- Exactly one `<reapack>` package: `Slava-Testing/index.lua`.
+- Versions present: `1.0.0`, `1.0.1`, and `1.0.2`.
+- v1.0.0 and v1.0.1 are byte-preserved and every historical source URL is
+  commit-pinned.
+- v1.0.2 has 50 sources: 8 Main action sources and 42 non-action sources.
+  All sources are explicitly scoped to `win64` or `darwin`; there are no Linux
+  or unscoped sources.
+- The four and only Main action files are `test_Curl_Jobs.lua`,
+  `test_Files.lua`, `test_docx.lua`, and `test_neurocast_auth.lua`.
+  Modules, binaries, and notices have no `main` attribute.
+- Package About and repository About are both populated as RTF generated from
+  readable Markdown. The package About includes the suite title and platform
+  notes; repository About is generated from `README.md`.
+
+## ReaPack Client Smoke Tests
+
+The command runner has no GUI automation channel for REAPER's ReaPack client.
+The following live Windows checks require execution in a clean or portable
+REAPER instance and remain explicitly unverified here:
+
+- install v1.0.1, synchronize, and update to v1.0.2 through ReaPack;
+- clean-install v1.0.2, then uninstall it and confirm an unrelated sentinel
+  file remains unchanged.
+
+Static source and index checks above confirm the required update source set and
+package-owned installation paths, but do not substitute for those client-side
+operations.
