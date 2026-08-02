@@ -14,6 +14,8 @@
 - `13c3daf5cc8a072ce7b7a519f259d380d2e3b285` corrects package About metadata.
 - `29b631b9bea72b8db4fb11af628ef4638ebe67cd` adds the complete multiline
   package About using the indexer's required header syntax.
+- `a6805914b9ce1aa8331518601df111de6d3fca09` adds the package About's
+  requirements, repository link, and license/notices link.
 - No commit was amended.
 
 ## Exact Commands and Results
@@ -37,10 +39,12 @@ reapack-index --about README.md --no-scan --no-commit
 
 Result: `1 modified metadata`.
 
-The indexer normalizes a newline inside the historical v1.0.1 changelog while
-serializing. After generation, the exact committed v1.0.0 and v1.0.1 XML
-version blocks were restored mechanically before committing the new index.
-Byte comparisons reported `True` for both historical blocks.
+The v1.0.2 index initially failed to preserve the historical XML because a
+PowerShell text pipeline changed the version blocks. That index was corrected
+afterward with binary-safe Ruby I/O: `IO.popen('git show bf73a14:index.xml',
+'rb')` reads the committed index, and `File.binwrite` restores the exact
+v1.0.0 and v1.0.1 blocks. The final binary comparisons report
+`v1.0.0: byte_preserved=true` and `v1.0.1: byte_preserved=true`.
 
 ## Generated Index Inspection
 
@@ -55,8 +59,9 @@ Byte comparisons reported `True` for both historical blocks.
   `test_Files.lua`, `test_docx.lua`, and `test_neurocast_auth.lua`.
   Modules, binaries, and notices have no `main` attribute.
 - Package About and repository About are both populated as RTF generated from
-  readable Markdown. The package About includes the suite title and platform
-  notes; repository About is generated from `README.md`.
+  readable Markdown. The package About includes the suite title, platform
+  notes, REAPER 7.0+ and ReaImGui requirements, repository link, and
+  license/notices link; repository About is generated from `README.md`.
 
 ## ReaPack Client Smoke Tests
 
