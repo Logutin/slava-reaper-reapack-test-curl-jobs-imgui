@@ -28,9 +28,16 @@
 --
 --   ## Installation notes
 --
+--   Requirements: REAPER 7.0+ and ReaImGui (available through ReaPack).
+--
 --   Install this one package from ReaPack, then find the four actions under
 --   `Slava-Testing` in REAPER's Actions list. Package license and notice files
 --   are installed in the package's `licenses` subdirectory.
+--
+--   ## Links
+--
+--   - Repository: https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui
+--   - License and notices: https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/blob/main/THIRD_PARTY_NOTICES.md
 -- @provides
 --   [main win64] test_Curl_Jobs.lua
 --   [main win64] test_Files.lua
