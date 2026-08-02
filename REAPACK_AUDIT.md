@@ -1,5 +1,17 @@
 # ReaPack Production-Readiness Audit
 
+## Local Tooling Authorization
+
+- Do not install, update, or remove Ruby or `reapack-index` without the
+  owner's explicit approval.
+- Check command availability and version first. Treat a missing tool as a
+  blocker to the corresponding indexing step; do not install a replacement by
+  default.
+- The 2026-08-02 workstation check found neither Ruby nor the
+  `reapack-index` command-line tool installed or available on `PATH`.
+- REAPER's installed ReaPack extension is separate from `reapack-index` and
+  does not authorize installing the command-line indexer.
+
 ## Package Structure
 
 - Exactly one indexed package: `Slava-Testing/index.lua`.
@@ -44,20 +56,6 @@ Automated and static checks do not replace REAPER installation testing.
 The repository must not be described as fully live-smoke-tested until the
 pending platform results are recorded here.
 
-## Open Binary-Maintenance Findings
-
-- curl upstream currently lists 36 published security problems affecting curl
-  8.13.0: <https://curl.se/docs/vuln-8.13.0.html>. Several entries require
-  features disabled in Microsoft's Windows build, but HTTP authentication,
-  cookie, redirect, proxy, and connection-reuse findings require a use-case
-  review. Updating the pinned executable needs live regression testing because
-  the test suite intentionally verifies this build's behavior.
-- 7-Zip 26.02 is newer than the bundled 26.00, and upstream states that 26.02
-  fixes bugs and vulnerabilities: <https://www.7-zip.org/sdk.html>. Before a
-  production-ready declaration, assess and preferably update the bundled pair,
-  then repeat DOCX extraction and clean install/uninstall tests.
-
-Version `1.0.1` resolves the identified ReaPack licensing, provenance,
-platform-scoping, About, and release-history defects. Production readiness is
-still withheld pending the live smoke tests and the binary-maintenance decision
-above.
+Version `1.0.1` remains the last indexed release. A v1.0.2 source preparation
+commit exists, but its indexing workflow is pending explicit approval to install
+the required command-line tooling or provide its installed location.
