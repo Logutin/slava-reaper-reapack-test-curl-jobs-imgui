@@ -11,6 +11,10 @@ metapackage.
 Work only on `main`. If another branch is absolutely necessary, stop and ask
 the owner before creating it.
 
+Once `index.xml` references a commit, treat that commit as permanent. Do not
+force-push or rewrite published history in a way that removes a commit-pinned
+package source.
+
 ### ReaPack Architecture and Platform Scoping
 
 - Keep exactly one indexed package: `Slava-Testing/index.lua`.
@@ -28,22 +32,37 @@ the owner before creating it.
 
 ### Normal ReaPack Release Sequence
 
-1. Change the provided files.
-2. Bump `@version` in `Slava-Testing/index.lua`.
-3. Add an accurate `@changelog`.
-4. Commit the source changes.
-5. Run `reapack-index --check --strict --warnings`.
-6. Run `reapack-index --scan --no-commit`.
-7. Verify that `index.xml` contains a new version and preserves every previous
-   version unchanged.
-8. Commit and push `index.xml`.
+1. Change the provided files, then bump `@version` in
+   `Slava-Testing/index.lua` and add an accurate `@changelog`.
+2. Before committing, run `reapack-index --check --strict --warnings`.
+3. Commit the source and documentation changes.
+4. Run `reapack-index --scan --no-commit`.
+5. If `README.md` changed, refresh repository About metadata with
+   `reapack-index --about README.md --no-scan --no-commit`.
+6. Inspect the generated `index.xml` semantically. For every prior version,
+   confirm its version name, author, timestamp, changelog text, target
+   filenames, platform and Main-action attributes, commit-pinned source URLs,
+   and package About content are unchanged. XML indentation and other
+   serialization formatting are not release invariants.
+7. Confirm the Windows and macOS Lua source sets are identical, all binaries
+   remain `win64`-only, and no source is unscoped or Linux-scoped.
+8. Commit and push the generated `index.xml` separately.
+
+Do not manually assemble, replace, or restore package or version blocks in
+`index.xml` during a normal release. It is generated catalogue data. For a
+diagnostic rebuild experiment only, write to a separate file with
+`reapack-index --rebuild --output index.rebuilt.xml --no-commit`, compare it
+semantically with the public index, and do not replace `index.xml` until the
+owner has reviewed the result.
 
 Use `reapack-index --about README.md --no-scan --no-commit` when refreshing the
 repository About metadata. Pandoc must be available on `PATH` for the Markdown
 to RTF conversion.
 
-`--amend` is forbidden for routine releases. It may be used only after an
-explicit owner decision to alter an already indexed version.
+Never use `--amend` during a routine new-version release. It may be used only
+after an explicit owner decision to repair metadata belonging to an already
+published version; document the reason and verify the amended version
+semantically.
 
 ### Binary Licensing and Provenance
 

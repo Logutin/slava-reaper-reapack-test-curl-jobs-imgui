@@ -39,19 +39,20 @@ reapack-index --about README.md --no-scan --no-commit
 
 Result: `1 modified metadata`.
 
-The v1.0.2 index initially failed to preserve the historical XML because a
-PowerShell text pipeline changed the version blocks. That index was corrected
-afterward with binary-safe Ruby I/O: `IO.popen('git show bf73a14:index.xml',
-'rb')` reads the committed index, and `File.binwrite` restores the exact
-v1.0.0 and v1.0.1 blocks. The final binary comparisons report
-`v1.0.0: byte_preserved=true` and `v1.0.1: byte_preserved=true`.
+The v1.0.2 index initially changed historical changelog text because a
+PowerShell text pipeline transformed generated XML. That process is not a
+release repair procedure and must not be repeated. The final check restored
+the intended historical content. Future releases compare historical versions
+semantically rather than requiring byte-identical XML serialization.
 
 ## Generated Index Inspection
 
 - Exactly one `<reapack>` package: `Slava-Testing/index.lua`.
 - Versions present: `1.0.0`, `1.0.1`, and `1.0.2`.
-- v1.0.0 and v1.0.1 are byte-preserved and every historical source URL is
-  commit-pinned.
+- v1.0.0 and v1.0.1 retain their version metadata, changelog text, provided
+  targets, platform/Main-action attributes, package documentation, and
+  commit-pinned historical source URLs. XML formatting itself is not an
+  invariant.
 - v1.0.2 has 50 sources: 8 Main action sources and 42 non-action sources.
   All sources are explicitly scoped to `win64` or `darwin`; there are no Linux
   or unscoped sources.
@@ -76,3 +77,17 @@ REAPER instance and remain explicitly unverified here:
 Static source and index checks above confirm the required update source set and
 package-owned installation paths, but do not substitute for those client-side
 operations.
+
+## Maintenance Policy
+
+- Do not manually replace package or version XML blocks during normal releases.
+- Never use `--amend` for a normal new-version release. An amendment to an
+  indexed version requires explicit owner approval, a documented reason, and
+  semantic verification of the corrected metadata.
+- Do not force-push or rewrite a commit once `index.xml` references it.
+- A rebuild is diagnostic only: run
+  `reapack-index --rebuild --output index.rebuilt.xml --no-commit`, compare it
+  semantically with the public index, and obtain owner review before replacing
+  the public index.
+- GitHub Actions are intentionally not configured yet; run the local strict
+  check and semantic inspection for every release.

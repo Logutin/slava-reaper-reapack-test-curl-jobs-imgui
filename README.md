@@ -37,3 +37,30 @@ their own terms. See the complete
 
 The applicable license and notice files are installed in the package's
 `licenses` subdirectory.
+
+## Maintainer Release Workflow
+
+This repository intentionally has no GitHub Actions yet. Releases are checked
+locally with the toolchain available on the maintainer's machine.
+
+1. Change package files and update the metapackage `@version` and
+   `@changelog`.
+2. Run `reapack-index --check --strict --warnings` before committing.
+3. Commit source and documentation changes, then run
+   `reapack-index --scan --no-commit`.
+4. When this README changes, refresh the repository About with
+   `reapack-index --about README.md --no-scan --no-commit`.
+5. Inspect the generated index semantically: historical version metadata,
+   changelog text, provided targets, platform/Main attributes, commit-pinned
+   source URLs, and package About must be retained. Whitespace-only XML
+   serialization changes are not failures.
+6. Commit and push the generated `index.xml` separately.
+
+Do not manually replace package or version blocks in `index.xml`. Never use
+`--amend` for an ordinary new release. An amendment to an indexed version
+requires an explicit owner decision and a documented semantic verification.
+Do not force-push or rewrite history after `index.xml` has referenced a commit.
+
+Before declaring a release complete, perform the documented ReaPack client
+smoke tests: update an installed prior version, clean-install the release,
+uninstall it, and confirm an unrelated sentinel file is unchanged.
