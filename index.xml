@@ -215,6 +215,16 @@ third-party notices and binary provenance
 }}}
 .\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 The applicable license and notice files are installed in the package's {\f1 licenses} subdirectory.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 Maintainer Release Workflow\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This repository intentionally has no GitHub Actions yet. Releases are checked locally with the toolchain available on the maintainer's machine.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab Change package files and update the metapackage {\f1 @version} and {\f1 @changelog}.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 2.\tx360\tab Run {\f1 reapack-index --check --strict --warnings} before committing.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 3.\tx360\tab Commit source and documentation changes, then run {\f1 reapack-index --scan --no-commit}.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 4.\tx360\tab When this README changes, refresh the repository About with {\f1 reapack-index --about README.md --no-scan --no-commit}.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 5.\tx360\tab Inspect the generated index semantically: historical version metadata, changelog text, provided targets, platform/Main attributes, commit-pinned source URLs, and package About must be retained. Whitespace-only XML serialization changes are not failures.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 6.\tx360\tab Commit and push the generated {\f1 index.xml} separately.\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Do not manually replace package or version blocks in {\f1 index.xml}. Never use {\f1 --amend} for an ordinary new release. An amendment to an indexed version requires an explicit owner decision and a documented semantic verification. Do not force-push or rewrite history after {\f1 index.xml} has referenced a commit.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Before declaring a release complete, perform the documented ReaPack client smoke tests: update an installed prior version, clean-install the release, uninstall it, and confirm an unrelated sentinel file is unchanged.\par}
 }
 ]]></description>
   </metadata>
