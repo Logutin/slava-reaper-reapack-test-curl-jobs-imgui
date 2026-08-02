@@ -1,10 +1,36 @@
 -- @description Slava REAPER Test Suite
--- @version 1.0.1
+-- @version 1.0.2
 -- @author Slava Logutin
 -- @metapackage
 -- @changelog
---   Add repository and third-party licensing, exact binary provenance, and installed notices.
---   Document safe release/platform rules and identify Unicode 17.0.0 generated data.
+--   Publish a harmless Files tester status-message update for ReaPack workflow testing.
+-- @about
+-- # Slava REAPER Test Suite
+--
+-- This metapackage installs four interactive ReaImGui test actions and their
+-- shared Lua modules. It is intended solely for testing ReaPack installation,
+-- update, and removal workflows.
+--
+-- ## Included actions
+--
+-- - **test_Curl_Jobs**: async HTTP operations and background-task scheduling.
+-- - **test_Files**: filesystem utilities, path manipulation, and sandbox I/O.
+-- - **test_docx**: DOCX extraction, XML parsing, and dialogue extraction.
+-- - **test_neurocast_auth**: Neurocast authentication-flow testing.
+--
+-- ## Platform support
+--
+-- - **Windows x64** installs the actions, shared modules, bundled support
+--   files, and applicable notices.
+-- - **macOS** installs the actions, shared modules, and applicable notices;
+--   it uses `/usr/bin/curl` and the system `unzip`.
+-- - **Linux** has no installable sources.
+--
+-- ## Installation notes
+--
+-- Install this one package from ReaPack, then find the four actions under
+-- `Slava-Testing` in REAPER's Actions list. Package license and notice files
+-- are installed in the package's `licenses` subdirectory.
 -- @provides
 --   [main win64] test_Curl_Jobs.lua
 --   [main win64] test_Files.lua

@@ -97,7 +97,7 @@ local tail_bytes_input = "16"
 local generic_path_input = r.GetResourcePath() or ""
 local confirm_destructive = false
 
-local last_status_text = "Ready."
+local last_status_text = "Ready to test sandboxed file operations."
 local rolling_log_lines = {}
 local log_max_lines = 300
 

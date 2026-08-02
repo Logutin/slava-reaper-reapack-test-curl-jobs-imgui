@@ -5,12 +5,10 @@ ReaPack metapackage.
 
 ## Included Tests
 
-| Script | Description |
-|---|---|
-| **test_Curl_Jobs** | Async HTTP operations and background task scheduling |
-| **test_Files** | Filesystem utilities, path manipulation, and sandbox I/O |
-| **test_docx** | DOCX archive extraction, XML parsing, and dialogue extraction |
-| **test_neurocast_auth** | Authentication flow testing against Neurocast endpoints |
+- **test_Curl_Jobs** — async HTTP operations and background task scheduling.
+- **test_Files** — filesystem utilities, path manipulation, and sandbox I/O.
+- **test_docx** — DOCX archive extraction, XML parsing, and dialogue extraction.
+- **test_neurocast_auth** — authentication-flow testing against Neurocast endpoints.
 
 ## Requirements
 
@@ -25,10 +23,9 @@ ReaPack metapackage.
 
 ## Installation
 
-1. Add this repository URL to ReaPack:
-   `https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/main/index.xml`
-2. Install **Slava REAPER Test Suite** from the package browser.
-3. Find the four test scripts in REAPER's Actions list under `Slava-Testing`.
+- Add this repository URL to ReaPack: <https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/raw/main/index.xml>
+- Install **Slava REAPER Test Suite** from the package browser.
+- Find the four test scripts in REAPER's Actions list under `Slava-Testing`.
 
 ## License and Notices
 
@@ -38,5 +35,5 @@ Bundled binaries, generated Unicode data, and the third-party JSON module retain
 their own terms. See the complete
 [third-party notices and binary provenance](https://github.com/Logutin/slava-reaper-reapack-test-curl-jobs-imgui/blob/main/THIRD_PARTY_NOTICES.md).
 
-The applicable license and notice files are installed with the package under
-`Scripts/Slava-Testing/licenses/`.
+The applicable license and notice files are installed in the package's
+`licenses` subdirectory.
